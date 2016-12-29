@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Notas</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_codigo">Código</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Entrar</string>
+    <string name="action_sign_in_short">Entrar</string>
+    <string name="error_invalid_email">Este campo es requerido</string>
+    <string name="error_invalid_password">La contraseña es muy corta</string>
+    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_field_required">Este campo es requerido</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="sistema_de_control_acad_mico_univesitario">Sistema de Control Académico Univesitario</string>
+</resources>
