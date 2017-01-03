@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +40,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_READ_CONTACTS = 0;
     JsonObjectRequest array;
     RequestQueue mRequestQueue;
+    ListAdapter adapter;
     private final String url = "http://192.168.0.105:8000/Sistema-Gestion-de-Notas/public/android/iniciarSesion";
     private final String TAG = "PRUEBITA";
 
@@ -66,9 +74,7 @@ public class LoginActivity extends AppCompatActivity {
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -80,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,12 +237,37 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: attempt authentication against a network service.
 
             mRequestQueue = VolleySingleton.getInstance().getmRequestQueue();
-
-            StringRequest request= new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
+            StringRequest request= new StringRequest(Request.Method.POST,Conexion.INICIAR_SESION, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    String token= response;
 
+
+                        Log.d("maxtoken",response);
+                        try {
+                            JSONObject obj= new JSONObject(response);
+                            JSONObject estudianteJson= new JSONObject(new  JSONArray(obj.getString("estudiante")).get(0).toString());
+
+                            Estudiante e = new Estudiante(
+                                    estudianteJson.getString("primerNombre"),
+                                    estudianteJson.getString("segundoNombre"),
+                                    estudianteJson.getString("primerApellido"),
+                                    estudianteJson.getString("segundoApellido"),
+                                    estudianteJson.getString("email"),
+                                    estudianteJson.getString("codigo"),
+                                    Boolean.parseBoolean(estudianteJson.getString("estado")),
+                                    Integer.parseInt(estudianteJson.getString("id")),
+                                    obj.getString("token")
+                                    );
+                            Sesion.setEstudiante(e);
+                            Estudiante aux = Sesion.getEstudianteEnSesion();
+                            String es = aux.getPrimerNombre()+" "+aux.getPrimerApellido();
+
+                            Log.d("estudiante",es);
+                            Log.d("token", obj.getString("token"));
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                            Log.d("elarta", "error al tratar de sacar los objetos json");
+                        }
                 }
             }, new Response.ErrorListener() {
                 @Override

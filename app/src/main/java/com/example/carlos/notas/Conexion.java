@@ -6,7 +6,7 @@ package com.example.carlos.notas;
 
 public class Conexion {
 
-    public static String URL="http://192.168.0.105:8000/Sistema-Gestion-de-Notas/public/android/";
+    public static String URL="http://192.168.0.107:8000/Sistema-Gestion-de-Notas/public/android/";
     public static String INICIAR_SESION=URL+"iniciarSesion";
     public static String URL_LISTAR_NOTAS=URL+"traerNotas";
 

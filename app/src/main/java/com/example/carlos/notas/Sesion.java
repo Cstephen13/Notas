@@ -11,7 +11,7 @@ public class Sesion {
 
 
     public  static void setEstudiante(Estudiante e){
-         EstudianteEnSesion= e;
+         EstudianteEnSesion = e;
     }
 
     public static  Estudiante getEstudianteEnSesion(){

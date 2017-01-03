@@ -16,6 +16,8 @@ public class Estudiante {
     private int id;
     private String token;
 
+    public Estudiante(){}
+
     public Estudiante(String primerNombre,String segundoNombre,String primerApellido,String segundoApellido,
                       String email,String codigo,boolean estado, int id,String token){
 
