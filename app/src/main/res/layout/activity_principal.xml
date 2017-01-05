@@ -11,10 +11,19 @@
     tools:context="com.example.carlos.notas.Principal">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+        android:id="@+id/nombreEstudiante" />
+
+    <TextView
         android:text="Aqui estaran tus notas proximamente  papu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="99dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/textView"
         tools:ignore="HardcodedText"
         android:layout_alignParentTop="true"
@@ -24,17 +33,18 @@
         android:text="Salir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:id="@+id/btnsalir"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        android:layout_below="@+id/nombreEstudiante"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="25dp"
-        android:id="@+id/nombreEstudiante" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/btnsalir"
+        android:layout_marginTop="35dp"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/listaAsignaturas" />
+
 </RelativeLayout>

@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Estudiante e;
 
 
     @Override
@@ -232,22 +233,26 @@ public class LoginActivity extends AppCompatActivity {
             mPassword = password;
         }
 
+
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            try{
+                Thread.sleep(5000);
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
 
             mRequestQueue = VolleySingleton.getInstance().getmRequestQueue();
             StringRequest request= new StringRequest(Request.Method.POST,Conexion.INICIAR_SESION, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-
-
                         Log.d("maxtoken",response);
                         try {
                             JSONObject obj= new JSONObject(response);
                             JSONObject estudianteJson= new JSONObject(new  JSONArray(obj.getString("estudiante")).get(0).toString());
 
-                            Estudiante e = new Estudiante(
+                             e = new Estudiante(
                                     estudianteJson.getString("primerNombre"),
                                     estudianteJson.getString("segundoNombre"),
                                     estudianteJson.getString("primerApellido"),
@@ -259,11 +264,10 @@ public class LoginActivity extends AppCompatActivity {
                                     obj.getString("token")
                                     );
                             Sesion.setEstudiante(e);
-                            Estudiante aux = Sesion.getEstudianteEnSesion();
-                            String es = aux.getPrimerNombre()+" "+aux.getPrimerApellido();
+                            Intent intent = new Intent(getApplicationContext(),Principal.class);
+                            startActivity(intent);
+                            Toast.makeText(getApplicationContext(),"iniciaste sesion papu",Toast.LENGTH_SHORT).show();
 
-                            Log.d("estudiante",es);
-                            Log.d("token", obj.getString("token"));
                         } catch (JSONException e1) {
                             e1.printStackTrace();
                             Log.d("elarta", "error al tratar de sacar los objetos json");
@@ -275,7 +279,10 @@ public class LoginActivity extends AppCompatActivity {
                     if (error.networkResponse != null){
                         if (error.networkResponse.statusCode == 401){
                             Toast.makeText(getApplicationContext(),"Código o contraseña incorrectos",Toast.LENGTH_SHORT).show();
+                        }else if(error.networkResponse.statusCode == 500){
+                            Toast.makeText(getApplicationContext(),"No se ha enviado el token",Toast.LENGTH_SHORT).show();
                         }
+
                     }
 
 
@@ -317,8 +324,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                startActivity(new Intent(getApplicationContext(),Principal.class));
-                Toast.makeText(getApplicationContext(),"iniciaste sesion papu",Toast.LENGTH_SHORT).show();
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
@@ -30,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,6 +59,7 @@ public class Principal extends AppCompatActivity {
             Log.d("alerta",e1.toString());
         }
         final CargarLista c = new CargarLista(this);
+        c.execute();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
@@ -72,8 +75,6 @@ public class Principal extends AppCompatActivity {
             public void onClick(View view) {
                 //s.setEstudiante(null);
                 //finish();
-
-                c.execute();
                try {
                    Log.d("nombre",Sesion.getEstudianteEnSesion().getPrimerNombre());
                }catch (Exception e1){
@@ -90,6 +91,8 @@ public class Principal extends AppCompatActivity {
         Context context;
         ProgressDialog pDialog;
         ArrayAdapter<String> adaptador;
+        ArrayList<String> asig = new ArrayList<>();
+
 
         public CargarLista(Context context){
             this.context = context;
@@ -116,35 +119,32 @@ public class Principal extends AppCompatActivity {
                 ex.printStackTrace();
             }
 
-            /*JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONObject>()
-                    {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            // display response
-                            Log.d("Response", response.toString());
-                        }
-                    },
-                    new Response.ErrorListener()
-                    {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("Error.Response", response);
-                        }
-                    }
-            );*/
-
-
             mRequestQueue = VolleySingleton.getInstance().getmRequestQueue();
-            StringRequest request = new StringRequest(
+           StringRequest request = new StringRequest(
                     Request.Method.GET,
-                    Conexion.URL_LISTAR_NOTAS+"?token="+s.getEstudianteEnSesion().getToken(),
+                    Conexion.URL_LISTAR_NOTAS+"?token="+s.getEstudianteEnSesion().getToken()+"&id="+s.getEstudianteEnSesion().getId(),
 
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     Log.d("asignaturas", response.toString());
+                    try {
+                        JSONObject obj= new JSONObject(response);
+                        JSONArray b = new JSONArray(obj.getString("asignaturasUltimoPeriodo"));
+                        for (int i=0;i<response.length();i++){
+                            Log.d("asignaturas",b.get(i).toString());
+                            asig.add(b.get(i).toString());
+                        }
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                    adaptador = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, asig);
+                    lista.setAdapter(adaptador);
+                    adaptador.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -153,20 +153,6 @@ public class Principal extends AppCompatActivity {
                 }
             })
             {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String,String> map = new HashMap<String,String>();
-                    map.put("id",Integer.toString(s.getEstudianteEnSesion().getId()));
-
-                    return map;
-                }
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> params = new HashMap<String, String>();
-                    params.put("Content-Type","application/x-www-form-urlencoded");
-                    return params;
-                }
-
                 @Override
                 public RetryPolicy getRetryPolicy() {
                     return new DefaultRetryPolicy(
