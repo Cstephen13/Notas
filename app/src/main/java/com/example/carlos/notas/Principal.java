@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -50,6 +51,7 @@ public class Principal extends AppCompatActivity {
         lista = (ListView) findViewById(R.id.listaAsignaturas);
         try {
             nombreEstudiante.setText(s.getEstudianteEnSesion().getPrimerNombre()+" "+s.getEstudianteEnSesion().getPrimerApellido());
+            Log.d("el token", s.getEstudianteEnSesion().getToken());
         }catch (Exception e1){
 
             Log.d("alerta",e1.toString());
@@ -134,23 +136,20 @@ public class Principal extends AppCompatActivity {
 
 
             mRequestQueue = VolleySingleton.getInstance().getmRequestQueue();
-            StringRequest request= new StringRequest(Request.Method.GET,Conexion.URL_LISTAR_NOTAS, new Response.Listener<String>() {
+            StringRequest request = new StringRequest(
+                    Request.Method.GET,
+                    Conexion.URL_LISTAR_NOTAS+"?token="+s.getEstudianteEnSesion().getToken(),
+
+                    new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.d("maxtoken",response);
-                     adaptador = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, Integer.parseInt(response));
+                    Log.d("asignaturas", response.toString());
+
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if (error.networkResponse != null) {
-                        if (error.networkResponse.statusCode == 401) {
-                            Toast.makeText(getApplicationContext(), "Código o contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                        } else if (error.networkResponse.statusCode == 500) {
-                            Toast.makeText(getApplicationContext(), "No se ha enviado el token", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
+                    Log.d("algo pasa", error.toString());
                 }
             })
             {
@@ -158,7 +157,7 @@ public class Principal extends AppCompatActivity {
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String,String> map = new HashMap<String,String>();
                     map.put("id",Integer.toString(s.getEstudianteEnSesion().getId()));
-                    map.put("token",s.getEstudianteEnSesion().getToken());
+
                     return map;
                 }
                 @Override
