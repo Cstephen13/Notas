@@ -60,28 +60,10 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
-    JsonObjectRequest array;
     RequestQueue mRequestQueue;
-    ListAdapter adapter;
-    private final String url = "http://192.168.0.105:8000/Sistema-Gestion-de-Notas/public/android/iniciarSesion";
-    private final String TAG = "PRUEBITA";
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
     private EditText mcodigo;
     private EditText mPasswordView;
     private View mProgressView;
@@ -108,8 +90,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,12 +135,12 @@ public class LoginActivity extends AppCompatActivity {
             mcodigo.setError(getString(R.string.error_field_required));
             focusView = mcodigo;
             cancel = true;
-        }/* else if (!isEmailValid(codigoEs)) {
-            codigo.setError(getString(R.string.error_invalid_email));
-            focusView = codigo;
+        }
+        if(TextUtils.isEmpty(password)){
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
             cancel = true;
-        }*/
-
+        }
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -171,11 +153,6 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask.execute((Void) null);
         }
     }
-
-    /*private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }*/
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
@@ -238,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try{
-                Thread.sleep(5000);
+                Thread.sleep(2000);
             }catch(Exception ex){
                 ex.printStackTrace();
             }

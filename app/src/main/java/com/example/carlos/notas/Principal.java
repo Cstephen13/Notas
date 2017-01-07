@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -39,6 +40,7 @@ public class Principal extends AppCompatActivity {
     Sesion s;
     ListView lista;
     RequestQueue mRequestQueue;
+    ArrayList<Item> asignaturas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +61,18 @@ public class Principal extends AppCompatActivity {
             Log.d("alerta",e1.toString());
         }
         final CargarLista c = new CargarLista(this);
-        c.execute();
+        //c.execute();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int posicion, long arg3) {
                 // TODO Auto-generated method stub
-                Toast.makeText(getApplicationContext(), "Ha pulsado el elemento " + posicion, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Ha pulsado el elemento " + asignaturas.get(posicion).getId(), Toast.LENGTH_SHORT).show();
+
+
+                /*Intent intent = new Intent(getApplicationContext(),Notas.class);
+                intent.putExtra("matricula_id", asignaturas.get(posicion).getId());
+                startActivity(intent);*/
             }
 
         });
@@ -74,7 +81,7 @@ public class Principal extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //s.setEstudiante(null);
-                //finish();
+                finish();
                try {
                    Log.d("nombre",Sesion.getEstudianteEnSesion().getPrimerNombre());
                }catch (Exception e1){
@@ -87,11 +94,13 @@ public class Principal extends AppCompatActivity {
     }
 
 
-    public class CargarLista extends AsyncTask<Void,Void,ArrayAdapter<String>>{
+    public class CargarLista extends AsyncTask<Void,Void,MiAdaptador>{
         Context context;
         ProgressDialog pDialog;
-        ArrayAdapter<String> adaptador;
+        MiAdaptador adaptador;
         ArrayList<String> asig = new ArrayList<>();
+
+        Item as;
 
 
         public CargarLista(Context context){
@@ -111,7 +120,7 @@ public class Principal extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayAdapter<String> doInBackground(Void... params) {
+        protected MiAdaptador doInBackground(Void... params) {
 
             try{
                 Thread.sleep(2000);
@@ -131,9 +140,21 @@ public class Principal extends AppCompatActivity {
                     try {
                         JSONObject obj= new JSONObject(response);
                         JSONArray b = new JSONArray(obj.getString("asignaturasUltimoPeriodo"));
+
+                        asignaturas = new ArrayList<>();
                         for (int i=0;i<response.length();i++){
-                            Log.d("asignaturas",b.get(i).toString());
-                            asig.add(b.get(i).toString());
+                            as = new Item();
+                            as.setId(Integer.parseInt(b.getJSONObject(i).getString("matricula_id")));
+                            as.setNombreItem(b.getJSONObject(i).getString("nombre_asignatura"));
+                            as.setNota(Double.parseDouble(b.getJSONObject(i).getString("definitiva")));
+                            asignaturas.add(as);
+
+                            Log.d("asignaturas_nombre",as.getNombreItem());
+                            asig.add(b.getJSONObject(i).getString("nombre_asignatura"));
+
+                            Log.d("asignaturas",b.getJSONObject(i).getString("nombre_asignatura"));
+
+
                         }
 
                     } catch (JSONException e) {
@@ -141,10 +162,10 @@ public class Principal extends AppCompatActivity {
                     }
 
 
-
-                    adaptador = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, asig);
+                    /*adaptador = new MiAdaptador(context, asignaturas);
+                   // adaptador = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, asig);
                     lista.setAdapter(adaptador);
-                    adaptador.notifyDataSetChanged();
+                    adaptador.notifyDataSetChanged();*/
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -163,11 +184,12 @@ public class Principal extends AppCompatActivity {
             };
             mRequestQueue.add(request);
 
+
             return adaptador;
         }
 
         @Override
-        protected void onPostExecute(ArrayAdapter<String> result) {
+        protected void onPostExecute(MiAdaptador result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             lista.setAdapter(result);

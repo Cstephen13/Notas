@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Notas</string>
+    <string name="app_name">S.C.A.U.Notas</string>
 
     <!-- Strings related to login -->
     <string name="prompt_codigo">Código</string>

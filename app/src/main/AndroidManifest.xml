@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Principal"></activity>
+        <activity android:name=".Principal" />
+        <activity android:name=".Notas"></activity>
     </application>
 
 </manifest>
