@@ -55,9 +55,14 @@ public class MiAdaptador extends BaseAdapter {
         nombreItem.setText(asignaturas.getNombreItem());
 
         TextView detalle=(TextView)v.findViewById(R.id.detalleItem);
-        detalle.setText(Double.toString(asignaturas.getNota()));
 
-
+        if (asignaturas.getAux()==null){
+            detalle.setText("Definitiva: "+Double.toString(asignaturas.getNota()));
+        }else{
+           detalle.setText("No Registrada");
+        }
         return v;
     }
+
+
 }

@@ -11,6 +11,7 @@ public class Item {
     private String nombreItem;
     private int id;
     private double nota;
+    private String aux;
 
     public Item(){}
     public Item(String nombreItem,double nota){
@@ -41,5 +42,13 @@ public class Item {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getAux() {
+        return aux;
+    }
+
+    public void setAux(String aux) {
+        this.aux = aux;
     }
 }

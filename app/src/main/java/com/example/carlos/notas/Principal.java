@@ -61,18 +61,18 @@ public class Principal extends AppCompatActivity {
             Log.d("alerta",e1.toString());
         }
         final CargarLista c = new CargarLista(this);
-        //c.execute();
+        c.execute();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int posicion, long arg3) {
                 // TODO Auto-generated method stub
-                Toast.makeText(getApplicationContext(), "Ha pulsado el elemento " + asignaturas.get(posicion).getId(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),  asignaturas.get(posicion).getNombreItem(), Toast.LENGTH_SHORT).show();
 
-
-                /*Intent intent = new Intent(getApplicationContext(),Notas.class);
-                intent.putExtra("matricula_id", asignaturas.get(posicion).getId());
-                startActivity(intent);*/
+                Intent intent = new Intent(getApplicationContext(),Notas.class);
+                intent.putExtra("matricula_id", Integer.toString(asignaturas.get(posicion).getId()));
+                intent.putExtra("nombreAsignatura", asignaturas.get(posicion).getNombreItem());
+                startActivity(intent);
             }
 
         });
@@ -123,13 +123,13 @@ public class Principal extends AppCompatActivity {
         protected MiAdaptador doInBackground(Void... params) {
 
             try{
-                Thread.sleep(2000);
+                Thread.sleep(4000);
             }catch(Exception ex){
                 ex.printStackTrace();
             }
 
             mRequestQueue = VolleySingleton.getInstance().getmRequestQueue();
-           StringRequest request = new StringRequest(
+            StringRequest request = new StringRequest(
                     Request.Method.GET,
                     Conexion.URL_LISTAR_NOTAS+"?token="+s.getEstudianteEnSesion().getToken()+"&id="+s.getEstudianteEnSesion().getId(),
 
@@ -162,10 +162,10 @@ public class Principal extends AppCompatActivity {
                     }
 
 
-                    /*adaptador = new MiAdaptador(context, asignaturas);
+                    adaptador = new MiAdaptador(context, asignaturas);
                    // adaptador = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, asig);
                     lista.setAdapter(adaptador);
-                    adaptador.notifyDataSetChanged();*/
+                    adaptador.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {
                 @Override

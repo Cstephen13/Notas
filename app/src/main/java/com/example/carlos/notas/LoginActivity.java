@@ -3,6 +3,7 @@ package com.example.carlos.notas;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -69,38 +70,45 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private Estudiante e;
+    private Context context;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=this;
         setContentView(R.layout.activity_login);
-
         mcodigo = (EditText) findViewById(R.id.codigo);
         mPasswordView = (EditText) findViewById(R.id.password);
-
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        if(!Conexion.compruebaConexion(this)){
+            Toast.makeText(getApplicationContext(),"al parecer no tienes conexion a internet",Toast.LENGTH_SHORT).show();
+        }
+
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                        attemptLogin();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+
+            mEmailSignInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
+
+            mLoginFormView = findViewById(R.id.login_form);
+            mProgressView = findViewById(R.id.login_progress);
+
+
     }
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -148,9 +156,14 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(codigoEs, password);
-            mAuthTask.execute((Void) null);
+            if(!Conexion.compruebaConexion(context)){
+                Toast.makeText(getApplicationContext(),"al parecer no tienes conexion a internet",Toast.LENGTH_SHORT).show();
+            }else{
+                showProgress(true);
+                mAuthTask = new UserLoginTask(codigoEs, password);
+                mAuthTask.execute((Void) null);
+            }
+
         }
     }
 
@@ -243,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
                             Sesion.setEstudiante(e);
                             Intent intent = new Intent(getApplicationContext(),Principal.class);
                             startActivity(intent);
-                            Toast.makeText(getApplicationContext(),"iniciaste sesion papu",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"iniciaste sesión ",Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e1) {
                             e1.printStackTrace();

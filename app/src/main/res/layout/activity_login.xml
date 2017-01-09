@@ -15,45 +15,33 @@
 
     >
 
-
-
-
-
-
     <!-- Login progress -->
 
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:layout_weight="0.20"
-        android:weightSum="1">
-
-        <TextView
-            android:text="@string/sistema_de_control_acad_mico_univesitario"
-            android:layout_width="336dp"
-            android:layout_height="wrap_content"
-            android:textSize="16.5sp"
-            android:gravity="center"
-            android:id="@+id/txtSistema"
-            android:textColor="#c62828"
-            android:textStyle="bold|italic"
-            android:layout_weight="1"
-            tools:ignore="InefficientWeight,NestedWeights" />
-    </LinearLayout>
+    <TextView
+        android:text="@string/sistema_de_control_acad_mico_univesitario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16.5sp"
+        android:gravity="center"
+        android:id="@+id/txtSistema"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
+        tools:ignore="InefficientWeight,NestedWeights"
+        android:layout_weight="0.20" />
 
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="343dp">
+        android:layout_height="343dp"
+        android:elevation="10dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:elevation="10dp">
 
 
             <android.support.design.widget.TextInputLayout
@@ -105,6 +93,7 @@
                 />
 
         </LinearLayout>
+
     </ScrollView>
 
     <ProgressBar

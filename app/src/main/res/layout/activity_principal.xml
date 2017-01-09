@@ -5,57 +5,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.carlos.notas.Principal">
 
-    <LinearLayout
-        android:orientation="vertical"
+
+    tools:context="com.example.carlos.notas.Principal"
+   >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:id="@+id/relativeLayout"
+        android:elevation="10dp"
+        android:background="@android:color/holo_red_dark">
+
+
+        <TextView
+            android:text="Asignaturas"
+            android:layout_width="match_parent"
+            android:textSize="35sp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            tools:ignore="HardcodedText,ObsoleteLayoutParam"
+            android:layout_marginStart="13dp"
+            android:layout_alignParentStart="true"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:text=""
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:id="@+id/nombreEstudiante"
+            tools:ignore="ObsoleteLayoutParam"
+            android:layout_below="@+id/textView"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="11dp"
+            android:textColor="@android:color/background_light" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/relativeLayout"
         android:layout_alignParentStart="true"
-        tools:ignore="UselessParent">
+        android:paddingTop="@dimen/activity_horizontal_margin"
+       >
+
+        <ListView
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:id="@+id/listaAsignaturas"
+            android:layout_height="match_parent"
+            tools:ignore="ObsoleteLayoutParam"
+            android:layout_above="@+id/btnsalir"
+            android:layout_alignParentTop="true" />
 
         <Button
-            android:text="Salir"
+            android:text="Cerrar sesión"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnsalir"
             tools:ignore="HardcodedText,ObsoleteLayoutParam"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="11dp"
-            android:layout_marginTop="11dp" />
-
-        <TextView
-            android:text="Aqui estaran tus notas proximamente  papu"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginTop="79dp"
-            android:id="@+id/textView"
-            tools:ignore="HardcodedText,ObsoleteLayoutParam"
-            android:layout_below="@+id/btnsalir"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="13dp" />
+            android:background="@color/greyDarken_1"
+            android:textColor="@android:color/background_light"
+            android:textSize="20dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:id="@+id/nombreEstudiante"
-            android:layout_below="@+id/textView"
-            android:layout_alignParentEnd="true"
-            tools:ignore="ObsoleteLayoutParam" />
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/listaAsignaturas"
-            android:layout_below="@+id/nombreEstudiante"
-            android:layout_alignParentStart="true"
-            tools:ignore="ObsoleteLayoutParam" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
